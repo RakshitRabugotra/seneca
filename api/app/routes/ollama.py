@@ -1,16 +1,11 @@
 from flask import Blueprint, request
-from flask_login import login_required, login_user, logout_user, current_user
-import json
+from flask_login import login_required
 
 # Custom modules
 from logger import logger
 
 from app.utils.validators import validate_none, validate_email
 from app.utils.responses import (
-    APIBaseException,
-    NotFoundException,
-    ConflictException,
-    UnauthorizedException,
     Success,
 )
 
@@ -35,14 +30,14 @@ def chat():
     messages = [
         ollama_client.message(
             role="system",
-            content="Your work is to help the human get through their problem",
+            content="Your work is to help the human get through their problem. Generate all responses in Markdown",
         ),
         ollama_client.message(
             role="user",
             content=query,
         ),
     ]
-
+    logger.info(f"Ollama: Generating response for the prompt: '{query}'")
     return Success(
         msg="success", payload=ollama_client.chat(messages=messages)
     ).response

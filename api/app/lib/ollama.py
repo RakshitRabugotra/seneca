@@ -11,7 +11,7 @@ class Ollama:
     client = Client(host="http://localhost:11434")
 
     # The current model to choose
-    model = "llama3.1"
+    model = "llama2"
 
     def __init__(self):
         """

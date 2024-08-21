@@ -12,6 +12,7 @@ from app.utils.responses import (
     NotFoundException,
     ConflictException,
     UnauthorizedException,
+    Success,
 )
 
 # Constants
@@ -95,7 +96,13 @@ def user_register():
     # Add this to the logs
     logger.info(msg=STRINGS["user"]["register-success"].format(new_user.email))
 
-    return "OK", 200
+    return Success(
+        msg="OK",
+        payload={
+            "username": username,
+            "email": email,
+        },
+    ).response
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -133,4 +140,9 @@ def user_login():
     # Log this
     logger.info(msg=STRINGS["user"]["login-success"].format(user.email))
 
-    return "OK", 200
+    return Success(
+        msg="OK",
+        payload={
+            "email": email,
+        },
+    ).response

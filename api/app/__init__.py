@@ -3,7 +3,6 @@ Initialize Flask application and register blueprints for each set of routes:
 """
 
 from flask import Flask
-from flask_cors import CORS
 
 # Custom modules
 from config import ApplicationConfig
@@ -17,8 +16,6 @@ ollama_client: Ollama = Ollama()
 
 # Create the app instance
 app = Flask(__name__)
-# TODO: Change this for deployment
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 # Set the configurations from external object
 app.config.from_object(ApplicationConfig)
@@ -41,6 +38,7 @@ login_manager.init_app(app)
 from .routes.admin import admin_bp
 from .routes.auth import auth_bp
 from .routes.ollama import ollama_bp
+from .routes.download import download_bp
 
 # Register blueprints
 app.register_blueprint(admin_bp, url_prefix="/_/admin")
@@ -48,3 +46,4 @@ app.register_blueprint(admin_bp, url_prefix="/_/admin")
 # The APIS for db access
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
 app.register_blueprint(ollama_bp, url_prefix="/api/ollama")
+app.register_blueprint(download_bp, url_prefix="/api/download")

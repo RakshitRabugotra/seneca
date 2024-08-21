@@ -50,7 +50,6 @@ const Signup = () => {
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsSubmitting(true);
     console.log(data);
-
     try {
       //   const fd = new FormData();
       //   fd.append("username", "krrish");
