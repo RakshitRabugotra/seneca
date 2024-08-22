@@ -58,7 +58,7 @@ The APIs for user_auth
 @auth_bp.route("/register", methods=["POST"])
 def user_register():
     """
-    Registers the user from the form data in request
+    Registers the user from the body in request
     """
     # Extract the json from the request
     __json = request.get_json()
@@ -113,7 +113,7 @@ def user_login():
     # Extract the json from the request
     __json = request.get_json()
 
-    # Get the data from the form
+    # Get the data from the body
     email = get_or_none(__json, "email")
     password = get_or_none(__json, "password")
 
