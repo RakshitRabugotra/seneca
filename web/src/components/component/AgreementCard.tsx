@@ -24,7 +24,7 @@ export default function AgreementCard({ title, icon }: AgreementCardProps) {
   return (
     <>
       <button onClick={handleClick}>
-        <div className="w-36 h-28 p-4 rounded-2xl bg-blue-950 hover:border-gray-400 custom-border flex flex-col items-center justify-around">
+        <div className="w-36 h-28 p-4 rounded-2xl bg-blue-950 hover:border-gray-400 hover:border flex flex-col items-center justify-around">
           {icon}
           <p className="">{title}</p>
         </div>

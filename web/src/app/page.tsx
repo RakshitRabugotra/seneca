@@ -60,13 +60,10 @@ export default function Home() {
 
   return (
     <>
-      <div className="hero-section-background min-h-[100vh]">
+      <div className="hero-section-background min-h-[100vh] text-white">
         <header className="flex justify-between p-6 lg:px-10 lg:py-4">
           <h1 className="text-3xl  font-heading font-extrabold">Seneca</h1>
-          <div className="flex gap-4 justify-center items-center">
-            <ThemeToggle />
-            <div className="w-10 h-10 dark:bg-white bg-black rounded-full"></div>
-          </div>
+          <div className="w-10 h-10 bg-white rounded-full"></div>
         </header>
         <section className=" mt-5 mb-10 lg:my-10 lg:w-[50%] m-auto">
           <p className="text-4xl lg:text-6xl font-extrabold text-center font-body leading-tight">
