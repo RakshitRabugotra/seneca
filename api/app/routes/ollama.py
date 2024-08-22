@@ -1,11 +1,12 @@
 from flask import Response, request, Blueprint
 from flask_login import login_required
-import asyncio
+
+import json
 
 # Custom modules
 from logger import logger
 
-from app.utils.validators import validate_none, validate_email
+from app.utils.validators import validate_none
 from app.utils.responses import (
     Success,
 )
@@ -34,15 +35,17 @@ def stream_chat(query):
     ]
 
     for chunk in ollama_client.async_chat(messages=messages):
-        yield chunk
-        asyncio.sleep(0)  # Give control back to the event loop
+        # Convert the dictionary to a JSON string and then encode it to bytes
+        chunk = json.dumps(chunk)
+        # logger.info(f"Ollama: Generated chunk {chunk} | for the query: {query}")
+        yield chunk.encode("utf-8")
 
 
 @ollama_bp.route("/chat-stream", methods=["POST"])
 def chat_stream():
     __json = request.get_json()
     query = __json["query"]
-
+    logger.info(f"Ollama: Generating stream response for the prompt: '{query}'")
     return Response(stream_chat(query), content_type="text/event-stream")
 
 
