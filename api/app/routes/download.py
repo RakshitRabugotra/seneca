@@ -1,4 +1,4 @@
-from flask import Blueprint, request, Response
+from quart import Blueprint, request, Response
 from weasyprint import HTML, CSS
 import markdown2
 import io
@@ -9,7 +9,7 @@ from logger import logger
 
 from app.utils.validators import get_or_none, validate_none
 from app.utils.responses import (
-    NotFoundException,
+    APIBaseException,
 )
 
 # Constants
@@ -53,7 +53,7 @@ def download_pdf():
     markdown_content = get_or_none(__json, "query")
 
     # If any of the fields is none, then return error
-    exception = validate_none(NotFoundException, query=markdown_content)
+    exception = validate_none(APIBaseException, query=markdown_content)
     if exception is not None:
         return exception.response
 
