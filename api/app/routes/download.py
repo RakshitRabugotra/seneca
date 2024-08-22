@@ -37,9 +37,7 @@ def download_pdf():
     if exception is not None:
         return exception.response
 
-    logger.info(
-        f"Generating document/pdf for user {dict(current_user).get('id', None)} | "
-    )
+    logger.info(f"Generating document/pdf for user")
     # Move the buffer's file pointer to the beginning
     buffer = io.BytesIO()
 
