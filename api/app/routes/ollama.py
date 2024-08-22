@@ -39,7 +39,7 @@ def stream_chat(query):
 
 
 @ollama_bp.route("/chat-stream", methods=["POST"])
-def chat():
+def chat_stream():
     __json = request.get_json()
     query = __json["query"]
 

@@ -1,4 +1,4 @@
-from quart import Blueprint, request, Response
+from flask import Blueprint, request, Response
 from weasyprint import HTML, CSS
 import markdown2
 import io
