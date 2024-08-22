@@ -1,4 +1,5 @@
 from flask import Blueprint, request, Response
+from flask_login import current_user
 from weasyprint import HTML, CSS
 import markdown2
 import io
@@ -7,6 +8,7 @@ import io
 # Custom modules
 from logger import logger
 
+from app.res.styles import A4_PRINT_CSS
 from app.utils.validators import get_or_none, validate_none
 from app.utils.responses import (
     APIBaseException,
@@ -20,28 +22,6 @@ from app.constants import STRINGS
 The APIs to get the current session info
 """
 download_bp = Blueprint("download", __name__)
-
-# Define a basic CSS for styling the PDF
-css = """
-    body {
-        font-family: Arial, sans-serif;
-        margin: 1in;
-        color: #333;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        color: #007BFF;
-    }
-    pre {
-        background-color: #f4f4f4;
-        padding: 0.5em;
-        border-radius: 4px;
-    }
-    code {
-        background-color: #f4f4f4;
-        padding: 0.2em;
-        border-radius: 4px;
-    }
-    """
 
 
 @download_bp.route("/pdf", methods=["POST"])
@@ -57,6 +37,9 @@ def download_pdf():
     if exception is not None:
         return exception.response
 
+    logger.info(
+        f"Generating document/pdf for user {dict(current_user).get('id', None)} | "
+    )
     # Move the buffer's file pointer to the beginning
     buffer = io.BytesIO()
 
@@ -67,7 +50,7 @@ def download_pdf():
     buffer.seek(0)
 
     # Generate PDF from HTML content with CSS
-    HTML(string=html_content).write_pdf(buffer, stylesheets=[CSS(string=css)])
+    HTML(string=html_content).write_pdf(buffer, stylesheets=[CSS(string=A4_PRINT_CSS)])
 
     # Move the buffer's file pointer to the beginning
     buffer.seek(0)
