@@ -104,6 +104,7 @@ Handles all authentication-related tasks.
 Handles interaction with the LLaMA2 model to generate markdown content.
 
 - **POST `/chat`**
+
   - **Purpose**: Generates a response from the LLaMA2 model based on the input query.
   - **Request Headers**:
     - `Content-Type: application/json`
@@ -136,6 +137,104 @@ Handles interaction with the LLaMA2 model to generate markdown content.
         "prompt_eval_count": number,
         "prompt_eval_duration": number,
         "total_duration": number
+      }
+    }
+    ```
+
+- **POST `/chat`**
+
+  - **Purpose**: Generates a response from the LLaMA2 model based on the input query.
+  - **Request Headers**:
+    - `Content-Type: application/json`
+  - **Request Body**:
+    ```json
+    {
+      "query": "Your query here"
+    }
+    ```
+  - **Response**:
+    - **200 OK**: Successfully generated markdown content.
+  - **Response Payload**:
+    ```json
+    {
+      "msg": "Response from LLaMA2 model",
+      "raw_msg": "Generated markdown content",
+      "code": 200,
+      "payload": {
+        "created_at": string,
+        "done": boolean,
+        "done_reason": string,
+        "eval_count": number,
+        "eval_duration": number,
+        "load_duration": number,
+        "message": {
+            "content": string,
+            "role": "assistant"
+        },
+        "model": string,
+        "prompt_eval_count": number,
+        "prompt_eval_duration": number,
+        "total_duration": number
+      }
+    }
+    ```
+
+- **POST `/chat-stream`**
+
+  - **Purpose**: Generates a response stream from the LLaMA2 model based on the input query.
+  - **Request Headers**:
+    - `Content-Type: application/json`
+  - **Request Body**:
+    ```json
+    {
+      "query": "Your query here"
+    }
+    ```
+  - **Response**:
+    - **200 OK**: Successfully generated markdown content.
+  - **Response Payload**:
+
+    During the stream
+
+    ```json
+    {
+      "msg": "Response from LLaMa2 model",
+      "raw_msg": "Generated markdown content",
+      "code": 200,
+      "payload": {
+        "model": "<model-name:string>",
+        "created_at": "<timestamp:string>",
+        "message": {
+          "role": "assistant",
+          "content": "<chunk of the content in:string>"
+        },
+        "done": false
+      }
+    }
+    ```
+
+    When the stream ends
+
+    ```json
+    {
+      "msg": "Response from LLaMA2 model",
+      "raw_msg": "Generated markdown content",
+      "code": 200,
+      "payload": {
+        "created_at": "<timestamp:string>",
+        "done": true,
+        "done_reason": "<reason:string>",
+        "eval_count": "<:number>",
+        "eval_duration": "<:number>",
+        "load_duration": "<:number>",
+        "message": {
+          "content": "<last chunk of the content>",
+          "role": "assistant"
+        },
+        "model": "<model-name:string>",
+        "prompt_eval_count": "<:number>",
+        "prompt_eval_duration": "<:number>",
+        "total_duration": "<:number>"
       }
     }
     ```
