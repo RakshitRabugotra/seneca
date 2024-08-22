@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 
@@ -10,11 +11,19 @@ export interface AgreementCardProps {
 
 export default function AgreementCard({ title, icon }: AgreementCardProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   const handleClick = async () => {
     setIsLoading(true);
     try {
+      const response = await authClient.get("/@me");
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+      }
+      if (!isAuthenticated) {
+        router.push("/login");
+      }
       router.push("/form");
     } catch {
     } finally {

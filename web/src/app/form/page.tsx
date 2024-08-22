@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { cn, markdown2HTML } from "@/lib/utils";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -33,6 +33,7 @@ import { toast } from "@/components/ui/use-toast";
 import { sendMessage } from "@/lib/gemini";
 import { marked } from "marked";
 import { useRouter } from "next/navigation";
+import { formSchema } from "@/schemas/form.schema";
 
 const items = [
   {
@@ -52,24 +53,6 @@ const items = [
     label: "Sick leave",
   },
 ] as const;
-
-const formSchema = z.object({
-  fullname: z.string().min(2).max(50),
-  company: z.string().min(2).max(50),
-  jobTitle: z.string().min(2).max(50),
-  joinDate: z.date({
-    required_error: "Date is required.",
-  }),
-  salary: z.string().min(2).max(50),
-  bonus: z.string().min(2).max(50),
-  benefits: z.array(z.string()),
-  employmentType: z.enum(["full-time", "part-time", "contract"], {
-    required_error: "You need to select.",
-  }),
-  workLocation: z.enum(["remote", "office", "hybrid"], {
-    required_error: "You need to select.",
-  }),
-});
 
 const loadingStates = [
   {
@@ -106,17 +89,7 @@ export default function Component() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      fullname: "deepanshu",
-      company: "google",
-      jobTitle: "web developer",
-      joinDate: new Date("2023-01-01"),
-      salary: "1000000",
-      bonus: "100000",
-      benefits: ["sick leave"],
-      employmentType: "full-time",
-      workLocation: "remote",
-    },
+    defaultValues: {},
   });
 
   const handleNext = async () => {
@@ -144,11 +117,11 @@ export default function Component() {
       event.preventDefault();
     }
   };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setLoading(true);
     const template = `
-    Please create a employment agreemt with details:
-
+    Prompt: Create a employment agreemt with details:
     1. Full Name: ${data.fullname}
     2. Company Name: ${data.company}
     3. Job Title: ${data.jobTitle}
@@ -158,6 +131,8 @@ export default function Component() {
     7. Benefits: ${data.benefits.join(", ")}
     8. Employment Type: ${data.employmentType}
     9. Work Location: ${data.workLocation}
+
+    Generate response in markdown
   `;
     try {
       const response = await sendMessage(template);
@@ -166,15 +141,16 @@ export default function Component() {
         const chunkText = await chunk.text();
         result += chunkText;
       }
-      const htmlContent = await marked(result);
-      console.log(htmlContent);
-
+      const res = await markdown2HTML(result);
+      localStorage.setItem("styledHtmlContent", res);
+      localStorage.setItem("markdown", await result);
+      router.push("/result");
       console.log(result);
       toast({
         title: "Success",
       });
     } catch (error) {
-      console.log("Error while login user: ", error);
+      console.log("Error while generating document: ", error);
       toast({
         title: "An error occurred",
         description: "Please try again later.",

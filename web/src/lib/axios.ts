@@ -19,3 +19,10 @@ export const llamaClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+export const downloadClient = axios.create({
+  baseURL: apiUrl + "/download",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
