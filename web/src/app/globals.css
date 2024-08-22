@@ -73,3 +73,31 @@
   border-width: 0.5px;
   border-style: solid;
 }
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+.hero-section-background{
+  background-image: url('https://github.githubassets.com/assets/hero-bg-ee8ae9ad2db9.jpg');
+  background-size: cover;
+}
+
+/* styles.css */
+.custom-span {
+  background: linear-gradient(260deg, #3d67ff 0%, #9773ff 50%, #efceff 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  .hero-section-background {
+    background-position: center;
+  }
+}

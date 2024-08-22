@@ -42,11 +42,9 @@ const chat = model.startChat({
   history: [
     {
       role: "user",
-      parts: [{ text: "Hello, You will answer to my prompts." }],
-    },
-    {
-      role: "model",
-      parts: [{ text: "Great to meet you. What would you like to know?" }],
+      parts: [
+        { text: "Hello, You will generate contract templates for my queries" },
+      ],
     },
   ],
   generationConfig: {
@@ -58,5 +56,6 @@ export const sendMessage = async (prompt: string) => {
   const result = await chat.sendMessageStream(prompt);
   return result;
 };
+1;
 
 export const getHistory = chat.getHistory;

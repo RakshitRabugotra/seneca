@@ -15,7 +15,13 @@ export const authClient = axios.create({
 
 export const llamaClient = axios.create({
   baseURL: apiUrl + "/ollama",
-  timeout: 10_000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const downloadClient = axios.create({
+  baseURL: apiUrl + "/download",
   headers: {
     "Content-Type": "application/json",
   },
