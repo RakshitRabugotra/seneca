@@ -1,5 +1,6 @@
-from flask import Blueprint, request
+from flask import Response, request, Blueprint
 from flask_login import login_required
+import asyncio
 
 # Custom modules
 from logger import logger
@@ -18,6 +19,31 @@ from app.constants import STRINGS
 The APIs to get the current session info
 """
 ollama_bp = Blueprint("ollama", __name__)
+
+
+def stream_chat(query):
+    messages = [
+        ollama_client.message(
+            role="system",
+            content="Your work is to help the human get through their problem. Generate all responses in Markdown",
+        ),
+        ollama_client.message(
+            role="user",
+            content=query,
+        ),
+    ]
+
+    for chunk in ollama_client.async_chat(messages=messages):
+        yield chunk
+        asyncio.sleep(0)  # Give control back to the event loop
+
+
+@ollama_bp.route("/chat-stream", methods=["POST"])
+def chat():
+    __json = request.get_json()
+    query = __json["query"]
+
+    return Response(stream_chat(query), content_type="text/event-stream")
 
 
 @ollama_bp.route("/chat", methods=["POST"])

@@ -7,9 +7,6 @@ from ollama import Client, Message
 
 
 class Ollama:
-    # Create the llama client
-    client = Client(host="http://localhost:11434")
-
     # The current model to choose
     model = "llama2"
 
@@ -17,6 +14,9 @@ class Ollama:
         """
         Initialize the chat system with Ollama
         """
+        # Create the llama client
+        self.client = Client(host="http://localhost:11434")
+
         logger.info("Ollama: Initializing Ollama server")
         # Try to initialize the server
         # success = self.__init_server()
@@ -40,6 +40,9 @@ class Ollama:
         Chat message.
         """
         return Message(role=role, content=content)
+
+    def async_chat(self, messages: list[Message]):
+        return self.client.chat(model=Ollama.model, messages=messages, stream=True)
 
     def chat(self, messages: list[Message]):
         return self.client.chat(model=Ollama.model, messages=messages, stream=False)
