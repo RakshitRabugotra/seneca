@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 import Link from "next/link";
-import { client } from "@/lib/axios";
+import { authClient } from "@/lib/axios";
 
 const Signup = () => {
   const [password, setPassword] = useState("");
@@ -55,7 +55,7 @@ const Signup = () => {
       //   fd.append("username", "krrish");
       //   fd.append("email", "krrishk@gmail.com");
       //   fd.append("password", "password12");
-      const response = await client.post("/register", data);
+      const response = await authClient.post("/register", data);
       toast({
         title: "Success",
         description: response.data.message,
